@@ -1,2 +1,2 @@
-# fab-app
-Shiny app for analysing multiple studies that assessed self-reported altruism and economic games
+# Welcome!
+This is a shiny app for the Facets of Altruistic Behaviors scale.
