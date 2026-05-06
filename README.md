@@ -3,6 +3,8 @@
 ## About the App
 This Shiny app allows users to complete the Facets of Altruistic Behaviors (FAB) Scale (Windmann et al., 2021), a psychometric scale assessing altruistic behavioral tendencies across three subscales. The app is available in German and English, with slightly different item selections per language reflecting validated subscale structures for each cultural context.
 
+App: luciebinder.shinyapps.io/fab-app/
+
 ## Subscales:
 🇩🇪 German version: Help Giving (HG), Peer Punishment (PP), Moral Courage (MC)  
 🇬🇧 English version: Costly Rewarding (CR), Costly Punishment (CP), Costly Countercontrol (CC)
