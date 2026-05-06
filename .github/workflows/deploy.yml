@@ -22,4 +22,4 @@ jobs:
             token  = Sys.getenv("SHINYAPPS_TOKEN"),
             secret = Sys.getenv("SHINYAPPS_SECRET")
           )'
-          Rscript -e 'rsconnect::deployApp(appName = "fab-app")'
+          Rscript -e 'rsconnect::deployApp(appName = "fab-app", forceUpdate = TRUE)'
