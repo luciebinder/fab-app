@@ -193,9 +193,9 @@ make_gauge <- function(pct, color, lang = "DE") {
     geom_path(data = fill_arc, aes(x = x, y = y), color = color, linewidth = 16, lineend = "round") +
     annotate("segment", x = 0, y = 0, xend = needle_x, yend = needle_y, color = "#111", linewidth = 2, lineend = "round") +
     annotate("point", x = 0, y = 0, color = "#111", size = 5) +
-    annotate("text", x = 0, y = -0.42, label = pct_label, size = 5, fontface = "bold", color = "#111", family = "sans") +
-    annotate("text", x = -1.32, y = 0.0, label = "0%",   size = 3.5, color = "#555", hjust = 1) +
-    annotate("text", x =  1.32, y = 0.0, label = "100%", size = 3.5, color = "#555", hjust = 0) +
+    annotate("text", x = 0, y = -0.42, label = pct_label, size = 7, fontface = "bold", color = "#111", family = "sans") +
+    annotate("text", x = -1.32, y = 0.0, label = "0%",   size = 5.5, color = "#555", hjust = 1) +
+    annotate("text", x =  1.32, y = 0.0, label = "100%", size = 5.5, color = "#555", hjust = 0) +
     coord_fixed(xlim = c(-1.65, 1.65), ylim = c(-0.58, 1.2)) +
     theme_void() +
     theme(plot.background = element_rect(fill = "white", color = NA), plot.margin = margin(4, 8, 4, 8))
@@ -221,16 +221,16 @@ make_norm_plot <- function(user_score, ref_scores, color, lang = "DE") {
     geom_line(data = df_norm, aes(x = x, y = y), color = color, linewidth = 1.4) +
     annotate("segment", x = user_score, xend = user_score, y = 0, yend = y_max * 1.10,
              color = "#000", linewidth = 1.1) +
-    annotate("text", x = x_lo, y = y_max * 1.20, label = pct_lbl,  color = "#000", size = 5, hjust = 0, fontface = "bold") +
-    annotate("text", x = x_hi, y = y_max * 1.20, label = mean_lbl, color = "#000", size = 5, hjust = 1, fontface = "bold") +
+    annotate("text", x = x_lo, y = y_max * 1.35, label = pct_lbl,  color = "#000", size = 7, hjust = 0, fontface = "bold") +
+    annotate("text", x = x_hi, y = y_max * 1.35, label = mean_lbl, color = "#000", size = 7, hjust = 1, fontface = "bold") +
     scale_x_continuous(limits = c(1, 6), breaks = 1:6) +
     scale_y_continuous(expand = expansion(mult = c(0, 0.28))) +
     labs(x = if(lang == "DE") "Mittelwert" else "Mean score", y = NULL) +
     theme_minimal(base_family = "sans") +
     theme(
-      axis.text.x        = element_text(size = 12, color = "#000"),
+      axis.text.x        = element_text(size = 16, color = "#000"),
       axis.text.y        = element_blank(),
-      axis.title.x       = element_text(size = 12, color = "#000", margin = margin(t=6)),
+      axis.title.x       = element_text(size = 16, color = "#000", margin = margin(t=6)),
       panel.grid.major.y = element_blank(),
       panel.grid.minor   = element_blank(),
       panel.grid.major.x = element_line(color = "#eee"),
@@ -256,18 +256,18 @@ ui <- fluidPage(
     tags$style(HTML("
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
       * { box-sizing: border-box; }
-      body { font-family: 'Inter', sans-serif; background: #f0f4f9; color: #1a1a2e; margin: 0; padding: 0; font-size: 16px; }
+      body { font-family: 'Inter', sans-serif; background: #f0f4f9; color: #1a1a2e; margin: 0; padding: 0; font-size: 18px; }
       .app-header {
         background: white; border-bottom: 4px solid #004E9E;
         color: #1a1a2e; padding: 20px 40px 16px;
         display: flex; align-items: center; justify-content: space-between; gap: 20px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.07);
       }
-      .app-header-text h2 { margin: 0 0 4px; font-size: 1.6rem; font-weight: 700; color: #004E9E; }
-      .app-header-text p  { margin: 0; color: #555; font-size: 1.3rem; }
+      .app-header-text h2 { margin: 0 0 4px; font-size: 1.8rem; font-weight: 700; color: #004E9E; }
+      .app-header-text p  { margin: 0; color: #555; font-size: 1.5rem; }
       .btn-home {
         background: #f0f5ff; color: #004E9E; border: 2px solid #004E9E; border-radius: 10px;
-        padding: 9px 18px; font-size: 1.3rem; font-weight: 600;
+        padding: 9px 18px; font-size: 1.5rem; font-weight: 600;
         cursor: pointer; white-space: nowrap; transition: all 0.18s;
         font-family: 'Inter', sans-serif; flex-shrink: 0;
       }
@@ -275,20 +275,20 @@ ui <- fluidPage(
       .lang-switcher { display: flex; gap: 10px; flex-shrink: 0; }
       .btn-lang {
         background: #f0f5ff; color: #004E9E; border: 2px solid #c5d8f0; border-radius: 10px;
-        padding: 9px 18px; font-size: 1.3rem; font-weight: 600;
+        padding: 9px 18px; font-size: 1.5rem; font-weight: 600;
         cursor: pointer; white-space: nowrap; transition: all 0.18s; font-family: 'Inter', sans-serif;
       }
       .btn-lang:hover { background: #004E9E; color: white; border-color: #004E9E; }
       .btn-lang.active { background: #004E9E; color: white; border-color: #004E9E; font-weight: 700; }
       .lang-bar { background: #0a2744; padding: 10px 40px; display: flex; align-items: center; gap: 14px; }
-      .lang-bar .control-label { color: rgba(255,255,255,0.85); font-size: 1.3rem; margin: 0; white-space: nowrap; }
-      .lang-bar select { font-size: 1.3rem; padding: 6px 10px; border-radius: 8px; }
+      .lang-bar .control-label { color: rgba(255,255,255,0.85); font-size: 1.5rem; margin: 0; white-space: nowrap; }
+      .lang-bar select { font-size: 1.5rem; padding: 6px 10px; border-radius: 8px; }
       .main-wrap { max-width: 900px; margin: 28px auto; padding: 0 18px 40px; }
       .card { background: white; border-radius: 14px; padding: 28px 30px; margin-bottom: 22px; box-shadow: 0 2px 14px rgba(0,0,0,0.06); }
-      .card-title { font-size: 1.6rem; font-weight: 700; color: #004E9E; margin: 0 0 18px; padding-bottom: 12px; border-bottom: 2px solid #dce8f7; }
-      .intro-box { background: white; border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 2px 14px rgba(0,0,0,0.06); font-size: 1.3rem; color: #1a1a2e; line-height: 1.6; }
-      .scale-banner { background: #e8f0fb; border-left: 4px solid #004E9E; border-radius: 0 8px 8px 0; padding: 12px 18px; font-size: 1.3rem; color: #0f3460; font-weight: 500; margin-bottom: 22px; }
-      .optional-hint { font-size: 1.3rem; color: #555; margin-bottom: 18px; padding: 10px 14px; background: #f8f9ff; border-radius: 8px; border-left: 3px solid #aac4e8; }
+      .card-title { font-size: 1.8rem; font-weight: 700; color: #004E9E; margin: 0 0 18px; padding-bottom: 12px; border-bottom: 2px solid #dce8f7; }
+      .intro-box { background: white; border-radius: 14px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 2px 14px rgba(0,0,0,0.06); font-size: 1.5rem; color: #1a1a2e; line-height: 1.6; }
+      .scale-banner { background: #e8f0fb; border-left: 4px solid #004E9E; border-radius: 0 8px 8px 0; padding: 12px 18px; font-size: 1.5rem; color: #0f3460; font-weight: 500; margin-bottom: 22px; }
+      .optional-hint { font-size: 1.5rem; color: #555; margin-bottom: 18px; padding: 10px 14px; background: #f8f9ff; border-radius: 8px; border-left: 3px solid #aac4e8; }
       .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
       @media(max-width:580px){ .demo-grid { grid-template-columns: 1fr; } }
       .matrix-card { padding: 24px 20px; }
@@ -302,8 +302,8 @@ ui <- fluidPage(
         position: sticky; top: 0; z-index: 100; background: white;
         padding-top: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.07);
       }
-      .matrix-item-col { font-size: 1.3rem; line-height: 1.55; padding-right: 20px; color: #1a1a2e; }
-      .matrix-anchor { font-size: 1.1rem; color: #333; font-weight: 500; text-align: center; line-height: 1.3; padding: 0 2px; white-space: pre-line; word-break: break-word; }
+      .matrix-item-col { font-size: 1.5rem; line-height: 1.55; padding-right: 20px; color: #1a1a2e; }
+      .matrix-anchor { font-size: 1.3rem; color: #333; font-weight: 500; text-align: center; line-height: 1.3; padding: 0 2px; white-space: pre-line; word-break: break-word; }
       .matrix-row { padding: 12px 0; border-bottom: 1px solid #f0f2f8; }
       .matrix-row:last-child { border-bottom: none; }
       .matrix-cell { display: flex; align-items: center; justify-content: center; }
@@ -311,19 +311,19 @@ ui <- fluidPage(
       .btn-primary-fab {
         background: linear-gradient(135deg, #004E9E, #1a6dd4); color: white;
         border: none; border-radius: 12px; padding: 14px 36px;
-        font-size: 1.3rem; font-weight: 600; cursor: pointer; width: 100%;
+        font-size: 1.5rem; font-weight: 600; cursor: pointer; width: 100%;
         margin-top: 8px; transition: opacity 0.18s; font-family: 'Inter', sans-serif;
       }
       .btn-primary-fab:hover { opacity: 0.88; }
       .btn-secondary-fab {
         background: white; color: #004E9E; border: 2px solid #004E9E;
-        border-radius: 12px; padding: 11px 30px; font-size: 1.3rem; font-weight: 600;
+        border-radius: 12px; padding: 11px 30px; font-size: 1.5rem; font-weight: 600;
         cursor: pointer; transition: all 0.18s; font-family: 'Inter', sans-serif;
       }
       .btn-secondary-fab:hover { background: #e8f0fb; }
       .btn-print {
         background: white; color: #004E9E; border: 2px solid #004E9E;
-        border-radius: 12px; padding: 11px 30px; font-size: 1.3rem; font-weight: 600;
+        border-radius: 12px; padding: 11px 30px; font-size: 1.5rem; font-weight: 600;
         cursor: pointer; transition: all 0.18s; font-family: 'Inter', sans-serif;
       }
       .btn-print:hover { background: #e8f0fb; }
@@ -331,51 +331,51 @@ ui <- fluidPage(
       .subscale-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
       @media(max-width:700px){ .subscale-grid { grid-template-columns: 1fr; } }
       .subscale-panel { background: white; border-radius: 14px; padding: 16px 12px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
-      .subscale-title { font-size: 1.3rem; font-weight: 700; color: #1a1a2e; text-align: center; margin-bottom: 8px; line-height: 1.3; }
+      .subscale-title { font-size: 1.5rem; font-weight: 700; color: #1a1a2e; text-align: center; margin-bottom: 8px; line-height: 1.3; }
       .subscale-divider { border: none; border-top: 1px solid #eef2ff; margin: 10px 0; }
       .gauge-stats { margin-top: 4px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
-      .gauge-classification { font-size: 1.1rem; color: #555; font-style: italic; text-align: center; margin-top: 2px; }
-      .gauge-mean { font-size: 1.3rem; color: #111; font-weight: 500; }
-      .pct-box { background: #f0f5fb; border-radius: 10px; padding: 14px 18px; font-size: 1.3rem; color: #1a1a2e; line-height: 1.6; margin-bottom: 14px; }
-      .badge-comp { display: inline-block; background: #dce8f7; color: #004E9E; border-radius: 20px; padding: 6px 18px; font-size: 1.3rem; font-weight: 600; }
-      .app-footer { text-align: center; font-size: 1rem; color: #888; padding: 16px 0 24px; line-height: 1.8; }
+      .gauge-classification { font-size: 1.3rem; color: #555; font-style: italic; text-align: center; margin-top: 2px; }
+      .gauge-mean { font-size: 1.5rem; color: #111; font-weight: 500; }
+      .pct-box { background: #f0f5fb; border-radius: 10px; padding: 14px 18px; font-size: 1.5rem; color: #1a1a2e; line-height: 1.6; margin-bottom: 14px; }
+      .badge-comp { display: inline-block; background: #dce8f7; color: #004E9E; border-radius: 20px; padding: 6px 18px; font-size: 1.5rem; font-weight: 600; }
+      .app-footer { text-align: center; font-size: 1.2rem; color: #888; padding: 16px 0 24px; line-height: 1.8; }
       .footer-link { color: #004E9E; text-decoration: none; }
       .footer-link:hover { text-decoration: underline; }
-      .err-box { background: #fff0f0; border: 1px solid #ffcdd2; border-radius: 8px; padding: 9px 15px; color: #c62828; font-size: 1.3rem; margin-bottom: 14px; }
+      .err-box { background: #fff0f0; border: 1px solid #ffcdd2; border-radius: 8px; padding: 9px 15px; color: #c62828; font-size: 1.5rem; margin-bottom: 14px; }
       /* Percentile table */
-      .pct-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 1.15rem; }
+      .pct-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 1.5rem; }
       .pct-table th { background: #e8f0fb; color: #004E9E; font-weight: 600; padding: 10px 14px; text-align: left; border-bottom: 2px solid #dce8f7; }
       .pct-table td { padding: 9px 14px; border-bottom: 1px solid #f0f4f9; color: #333; }
       .pct-table tr:last-child td { border-bottom: none; }
       .pct-table tr:nth-child(even) td { background: #f8fafd; }
       /* Subscale result cards */
       .subscale-result-card { margin-bottom: 20px; }
-      .facet-desc { font-size: 1.3rem; color: #1a1a2e; line-height: 1.55; margin-bottom: 16px; }
+      .facet-desc { font-size: 1.5rem; color: #1a1a2e; line-height: 1.55; margin-bottom: 16px; }
       .plots-row { display: flex; gap: 16px; margin-bottom: 12px; }
       .plot-col { flex: 1; min-width: 0; }
       @media(max-width: 600px) { .plots-row { flex-direction: column; } }
-      .summary-sent { font-size: 1.3rem; color: #1a1a2e; line-height: 1.6; background: #f0f5fb; border-radius: 10px; padding: 12px 16px; margin-top: 4px; }
+      .summary-sent { font-size: 1.5rem; color: #1a1a2e; line-height: 1.6; background: #f0f5fb; border-radius: 10px; padding: 12px 16px; margin-top: 4px; }
       /* FAB info */
       .fab-info-card { margin-top: 4px; }
-      .fab-info-title { font-size: 1.3rem; font-weight: 700; color: #004E9E; margin-bottom: 10px; }
-      .fab-info-text { font-size: 1.15rem; color: #444; line-height: 1.6; }
+      .fab-info-title { font-size: 1.5rem; font-weight: 700; color: #004E9E; margin-bottom: 10px; }
+      .fab-info-text { font-size: 1.3rem; color: #444; line-height: 1.6; }
       .fab-link { color: #004E9E; font-weight: 600; text-decoration: none; }
       .fab-link:hover { text-decoration: underline; }
       .fab-info-card { margin-top: 4px; }
-      .fab-info-title { font-size: 1.3rem; font-weight: 700; color: #004E9E; margin-bottom: 10px; }
-      .fab-info-text { font-size: 1.15rem; color: #444; line-height: 1.6; }
+      .fab-info-title { font-size: 1.5rem; font-weight: 700; color: #004E9E; margin-bottom: 10px; }
+      .fab-info-text { font-size: 1.3rem; color: #444; line-height: 1.6; }
       .fab-link { color: #004E9E; font-weight: 600; text-decoration: none; }
       .fab-link:hover { text-decoration: underline; }
       .form-control, .selectize-input, .selectize-input input,
       .selectize-dropdown, .selectize-dropdown-content,
       .selectize-dropdown .option, .selectize-dropdown .active {
-        font-family: 'Inter', sans-serif !important; font-size: 1.3rem !important;
+        font-family: 'Inter', sans-serif !important; font-size: 1.5rem !important;
       }
       .form-control, .selectize-input { border-radius: 9px !important; border: 2px solid #dce8f7 !important; }
       .selectize-dropdown { max-height: 340px !important; }
       .selectize-dropdown-content { max-height: 340px !important; }
-      .control-label { font-size: 1.3rem !important; font-family: 'Inter', sans-serif !important; }
-      .lang-bar select, .lang-bar .form-control { font-size: 1.3rem !important; font-family: 'Inter', sans-serif !important; }
+      .control-label { font-size: 1.5rem !important; font-family: 'Inter', sans-serif !important; }
+      .lang-bar select, .lang-bar .form-control { font-size: 1.5rem !important; font-family: 'Inter', sans-serif !important; }
       @media print {
         .app-header, .lang-bar, .results-buttons, .pct-box, .badge-comp { display: none !important; }
         body { background: white !important; }
@@ -384,88 +384,88 @@ ui <- fluidPage(
       }
     "))
   ),
-  
+
   div(class = "app-header",
-      div(class = "app-header-text",
-          tags$h2(textOutput("hdr_title")),
-          tags$p(textOutput("hdr_subtitle"))
-      ),
-      conditionalPanel("output.current_panel == 'fab_items'",
-                       div(class = "lang-switcher",
-                           tags$button("Deutsch", class = "btn-lang", id = "btn_lang_de",
-                                       onclick = "Shiny.setInputValue('sel_lang', 'DE', {priority: 'event'})"),
-                           tags$button("English", class = "btn-lang", id = "btn_lang_en",
-                                       onclick = "Shiny.setInputValue('sel_lang', 'EN', {priority: 'event'})")
-                       )
-      ),
-      conditionalPanel("output.current_panel != 'fab_items'",
-                       actionButton("btn_home", label = textOutput("lbl_home"), class = "btn-home")
+    div(class = "app-header-text",
+      tags$h2(textOutput("hdr_title")),
+      tags$p(textOutput("hdr_subtitle"))
+    ),
+    conditionalPanel("output.current_panel == 'fab_items'",
+      div(class = "lang-switcher",
+        tags$button("Deutsch", class = "btn-lang", id = "btn_lang_de",
+          onclick = "Shiny.setInputValue('sel_lang', 'DE', {priority: 'event'})"),
+        tags$button("English", class = "btn-lang", id = "btn_lang_en",
+          onclick = "Shiny.setInputValue('sel_lang', 'EN', {priority: 'event'})")
       )
+    ),
+    conditionalPanel("output.current_panel != 'fab_items'",
+      actionButton("btn_home", label = textOutput("lbl_home"), class = "btn-home")
+    )
   ),
-  
+
   div(style = "display:none;",
-      selectInput("sel_lang", label = NULL, choices = c("Deutsch" = "DE", "English" = "EN"), selected = "DE")
+    selectInput("sel_lang", label = NULL, choices = c("Deutsch" = "DE", "English" = "EN"), selected = "DE")
   ),
-  
+
   div(class = "main-wrap",
-      conditionalPanel("output.current_panel == 'fab_items'",
-                       div(class = "intro-box", textOutput("lbl_intro")),
-                       div(class = "scale-banner", textOutput("lbl_scale")),
-                       uiOutput("ui_items"),
-                       uiOutput("ui_item_err"),
-                       actionButton("btn_next", textOutput("lbl_next"), class = "btn-primary-fab", style = "margin-top: 14px;")
-      ),
-      conditionalPanel("output.current_panel == 'fab_demo'",
-                       div(class = "card",
-                           div(class = "card-title", textOutput("lbl_demo_hdr")),
-                           div(class = "optional-hint", textOutput("lbl_optional_hint")),
-                           div(class = "demo-grid",
-                               numericInput("inp_age",   textOutput("lbl_age"),    value = NA, min = 18, max = 100),
-                               selectInput("inp_gender", textOutput("lbl_gender"), choices = c("–" = ""))
-                           ),
-                           selectInput("inp_edu", textOutput("lbl_edu"), choices = c("–" = "")),
-                           uiOutput("ui_demo_err"),
-                           actionButton("btn_submit", textOutput("lbl_submit"), class = "btn-primary-fab")
-                       )
-      ),
-      conditionalPanel("output.current_panel == 'fab_results'",
-                       div(class = "card",
-                           div(class = "card-title", textOutput("lbl_results_hdr")),
-                           uiOutput("ui_comp_badge")
-                       ),
-                       # Subscale results (one card per subscale)
-                       uiOutput("ui_subscale_panels"),
-                       # Percentile explanation + table BELOW results
-                       div(class = "card",
-                           div(class = "fab-info-title", textOutput("lbl_pct_section_hdr")),
-                           div(class = "pct-box", style = "margin-bottom: 0;", textOutput("lbl_pct_info")),
-                           uiOutput("ui_pct_table")
-                       ),
-                       # FAB info at bottom
-                       div(class = "card fab-info-card",
-                           uiOutput("ui_fab_info")
-                       ),
-                       div(class = "results-buttons",
-                           actionButton("btn_back", textOutput("lbl_back"), class = "btn-secondary-fab")
-                       )
+    conditionalPanel("output.current_panel == 'fab_items'",
+      div(class = "intro-box", textOutput("lbl_intro")),
+      div(class = "scale-banner", textOutput("lbl_scale")),
+      uiOutput("ui_items"),
+      uiOutput("ui_item_err"),
+      actionButton("btn_next", textOutput("lbl_next"), class = "btn-primary-fab", style = "margin-top: 14px;")
+    ),
+    conditionalPanel("output.current_panel == 'fab_demo'",
+      div(class = "card",
+        div(class = "card-title", textOutput("lbl_demo_hdr")),
+        div(class = "optional-hint", textOutput("lbl_optional_hint")),
+        div(class = "demo-grid",
+          numericInput("inp_age",   textOutput("lbl_age"),    value = NA, min = 18, max = 100),
+          selectInput("inp_gender", textOutput("lbl_gender"), choices = c("–" = ""))
+        ),
+        selectInput("inp_edu", textOutput("lbl_edu"), choices = c("–" = "")),
+        uiOutput("ui_demo_err"),
+        actionButton("btn_submit", textOutput("lbl_submit"), class = "btn-primary-fab")
       )
+    ),
+    conditionalPanel("output.current_panel == 'fab_results'",
+      div(class = "card",
+        div(class = "card-title", textOutput("lbl_results_hdr")),
+        uiOutput("ui_comp_badge")
+      ),
+      # Subscale results (one card per subscale)
+      uiOutput("ui_subscale_panels"),
+      # Percentile explanation + table BELOW results
+      div(class = "card",
+        div(class = "fab-info-title", textOutput("lbl_pct_section_hdr")),
+        div(class = "pct-box", style = "margin-bottom: 0;", textOutput("lbl_pct_info")),
+        uiOutput("ui_pct_table")
+      ),
+      # FAB info at bottom
+      div(class = "card fab-info-card",
+        uiOutput("ui_fab_info")
+      ),
+      div(class = "results-buttons",
+        actionButton("btn_back", textOutput("lbl_back"), class = "btn-secondary-fab")
+      )
+    )
   ),
   tags$footer(class = "app-footer", uiOutput("ui_footer"))
 )
 
 # ── Server ─────────────────────────────────────────────────────────────────────
 server <- function(input, output, session) {
-  
+
   rv_panel      <- reactiveVal("fab_items")
   rv_scores     <- reactiveVal(NULL)
   rv_ref        <- reactiveVal(NULL)
   rv_item_order <- reactiveVal(NULL)
-  
+
   is_de <- reactive({ input$sel_lang == "DE" })
-  
+
   output$current_panel <- reactive({ rv_panel() })
   outputOptions(output, "current_panel", suspendWhenHidden = FALSE)
-  
+
   output$hdr_title        <- renderText({ if(is_de()) "FAB \u2013 Fragebogen zu altruistischen Verhaltensweisen" else "FAB \u2013 Facets of Altruistic Behaviors Scale" })
   output$hdr_subtitle     <- renderText({ "" })
   output$lbl_lang         <- renderText({ if(is_de()) "Sprache" else "Language" })
@@ -494,18 +494,18 @@ server <- function(input, output, session) {
     if(is_de()) "Ihre Angaben sind freiwillig. Ohne Angaben werden Ihre Ergebnisse mit der gesamten deutschsprachigen Stichprobe verglichen (N\u00a0=\u00a03.757). Mit Angaben werden Ihre Ergebnisse verglichen mit Personen gleichen Geschlechts, \u00e4hnlichen Alters (\u00b110 Jahre) und gleicher Bildung. Sind in dieser Gruppe weniger als 20 Personen vorhanden, wird die Vergleichsgruppe schrittweise erweitert. Es werden keinerlei Daten gespeichert oder \u00fcbertragen."
     else "Your input is optional. Without input, your results will be compared to the full English-speaking sample (N\u00a0=\u00a02,049). With input, your results will be compared to people of the same gender, similar age (\u00b110 years), and same education level. If fewer than 20 people match these criteria, the comparison group is broadened stepwise. No data is stored or transmitted."
   })
-  
+
   observeEvent(input$sel_lang, {
     updateSelectInput(session, "inp_gender", choices = c("\u2013" = "", if(is_de()) gender_de else gender_en))
     updateSelectInput(session, "inp_edu",    choices = c("\u2013" = "", if(is_de()) edu_de else edu_en))
     rv_item_order(NULL)
     session$sendCustomMessage("activeLang", input$sel_lang)
   })
-  
+
   output$ui_demo_err <- renderUI(NULL)
-  
+
   observeEvent(input$btn_next, { rv_panel("fab_demo") })
-  
+
   output$ui_items <- renderUI({
     items_def <- if(is_de()) items_de else items_en
     legend    <- if(is_de()) scale_legend_de else scale_legend_en
@@ -516,31 +516,31 @@ server <- function(input, output, session) {
     if (is.null(rv_item_order())) rv_item_order(sample(names(all_items)))
     item_order <- rv_item_order()
     header_row <- div(class = "matrix-header",
-                      div(class = "matrix-item-col"),
-                      lapply(legend, function(l) div(class = "matrix-anchor", l))
+      div(class = "matrix-item-col"),
+      lapply(legend, function(l) div(class = "matrix-anchor", l))
     )
     item_rows <- lapply(item_order, function(ik) {
       radio_cells <- lapply(1:6, function(val) {
         div(class = "matrix-cell",
-            tags$input(type = "radio", name = paste0("r_", ik), value = val,
-                       id = paste0("r_", ik, "_", val),
-                       onclick = paste0("Shiny.setInputValue('r_", ik, "', ", val, ", {priority: 'event'})"))
+          tags$input(type = "radio", name = paste0("r_", ik), value = val,
+            id = paste0("r_", ik, "_", val),
+            onclick = paste0("Shiny.setInputValue('r_", ik, "', ", val, ", {priority: 'event'})"))
         )
       })
       div(class = "matrix-row", div(class = "matrix-item-col", all_items[[ik]]), tagList(radio_cells))
     })
     div(class = "card matrix-card", header_row, tagList(item_rows))
   })
-  
+
   output$ui_item_err <- renderUI(NULL)
-  
+
   observeEvent(input$btn_submit, {
     age_val <- input$inp_age
     age_ok  <- is.na(age_val) || (age_val >= 18 && age_val <= 100)
     if (!age_ok) {
       output$ui_demo_err <- renderUI(div(class = "err-box",
-                                         if(is_de()) "Bitte geben Sie ein g\u00fcltiges Alter ein (18\u2013100) oder lassen Sie das Feld leer."
-                                         else "Please enter a valid age (18\u2013100) or leave the field empty."))
+        if(is_de()) "Bitte geben Sie ein g\u00fcltiges Alter ein (18\u2013100) oder lassen Sie das Feld leer."
+        else "Please enter a valid age (18\u2013100) or leave the field empty."))
       return()
     }
     output$ui_demo_err <- renderUI(NULL)
@@ -557,7 +557,7 @@ server <- function(input, output, session) {
     }
     if (any_missing) {
       output$ui_item_err <- renderUI(div(class = "err-box",
-                                         if(is_de()) "Bitte beantworten Sie alle Fragen." else "Please answer all questions."))
+        if(is_de()) "Bitte beantworten Sie alle Fragen." else "Please answer all questions."))
       return()
     }
     output$ui_item_err <- renderUI(NULL)
@@ -576,21 +576,21 @@ server <- function(input, output, session) {
     rv_scores(list(means = sub_means, percentiles = pcts, ref_scores = ref_scores_list))
     rv_panel("fab_results")
   })
-  
+
   output$ui_comp_badge <- renderUI({
     ref <- rv_ref(); if(is.null(ref)) return(NULL)
     n <- nrow(ref$data)
     lbl_text <- switch(ref$level,
-                       "specific" = if(is_de()) paste0("Vergleichsgruppe (passend): n\u00a0=\u00a0", n, " Personen") else paste0("Matched comparison group: n\u00a0=\u00a0", n, " participants"),
-                       "broad"    = if(is_de()) paste0("Vergleichsgruppe (breit): n\u00a0=\u00a0", n, " Personen")    else paste0("Broad comparison group: n\u00a0=\u00a0", n, " participants"),
-                       if(is_de()) paste0("Gesamtstichprobe: N\u00a0=\u00a0", n, " Personen") else paste0("Full sample: N\u00a0=\u00a0", n, " participants")
+      "specific" = if(is_de()) paste0("Vergleichsgruppe (passend): n\u00a0=\u00a0", n, " Personen") else paste0("Matched comparison group: n\u00a0=\u00a0", n, " participants"),
+      "broad"    = if(is_de()) paste0("Vergleichsgruppe (breit): n\u00a0=\u00a0", n, " Personen")    else paste0("Broad comparison group: n\u00a0=\u00a0", n, " participants"),
+      if(is_de()) paste0("Gesamtstichprobe: N\u00a0=\u00a0", n, " Personen") else paste0("Full sample: N\u00a0=\u00a0", n, " participants")
     )
     div(style = "display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px;",
-        div(class = "badge-comp", style = "margin-bottom:0;", lbl_text),
-        tags$button(textOutput("lbl_print"), class = "btn-print", onclick = "window.print()")
+      div(class = "badge-comp", style = "margin-bottom:0;", lbl_text),
+      tags$button(textOutput("lbl_print"), class = "btn-print", onclick = "window.print()")
     )
   })
-  
+
   # ── Percentile classification table ─────────────────────────────────────────
   output$ui_pct_table <- renderUI({
     if(is_de()) {
@@ -613,29 +613,29 @@ server <- function(input, output, session) {
       hdr <- c("Percentile rank", "Classification")
     }
     tags$table(class = "pct-table",
-               tags$thead(
-                 tags$tr(lapply(hdr, function(h) tags$th(h)))
-               ),
-               tags$tbody(
-                 lapply(rows, function(r) tags$tr(lapply(r, function(cell) tags$td(cell))))
-               )
+      tags$thead(
+        tags$tr(lapply(hdr, function(h) tags$th(h)))
+      ),
+      tags$tbody(
+        lapply(rows, function(r) tags$tr(lapply(r, function(cell) tags$td(cell))))
+      )
     )
   })
-  
+
   output$ui_subscale_panels <- renderUI({
     sc <- rv_scores(); if(is.null(sc)) return(NULL)
     items_def <- if(is_de()) items_de else items_en
     desc_vec  <- if(is_de()) facet_desc_de else facet_desc_en
     ref       <- rv_ref()
     n_ref     <- if(!is.null(ref)) nrow(ref$data) else "?"
-    
+
     lapply(names(sc$means), function(sk) {
       sub       <- items_def[[sk]]
       mean_val  <- round(sc$means[[sk]], 2)
       pct       <- sc$percentiles[[sk]]
       pct_class <- if(!is.null(pct)) classify_percentile(pct, if(is_de()) "DE" else "EN") else ""
       facet_txt <- if(sk %in% names(desc_vec)) desc_vec[[sk]] else ""
-      
+
       # Summary sentence
       summary_sent <- if(!is.null(pct)) {
         if(is_de())
@@ -649,27 +649,27 @@ server <- function(input, output, session) {
       } else {
         if(is_de()) "Zu wenige Vergleichsdaten verfügbar." else "Insufficient comparison data available."
       }
-      
+
       div(class = "card subscale-result-card",
-          # Subscale title
-          div(class = "card-title", sub$subscale_label),
-          # Short definition
-          div(class = "facet-desc", facet_txt),
-          # Gauges side by side
-          div(class = "plots-row",
-              div(class = "plot-col",
-                  plotOutput(paste0("g_", sk), height = "210px")
-              ),
-              div(class = "plot-col",
-                  plotOutput(paste0("n_", sk), height = "210px")
-              )
+        # Subscale title
+        div(class = "card-title", sub$subscale_label),
+        # Short definition
+        div(class = "facet-desc", facet_txt),
+        # Gauges side by side
+        div(class = "plots-row",
+          div(class = "plot-col",
+            plotOutput(paste0("g_", sk), height = "210px")
           ),
-          # Summary sentence
-          div(class = "summary-sent", summary_sent)
+          div(class = "plot-col",
+            plotOutput(paste0("n_", sk), height = "210px")
+          )
+        ),
+        # Summary sentence
+        div(class = "summary-sent", summary_sent)
       )
     })
   })
-  
+
   observe({
     sc <- rv_scores(); if(is.null(sc)) return()
     items_def    <- if(is_de()) items_de else items_en
@@ -684,7 +684,7 @@ server <- function(input, output, session) {
       })
     }
   })
-  
+
   observe({
     sc <- rv_scores(); if(is.null(sc)) return()
     items_def    <- if(is_de()) items_de else items_en
@@ -701,27 +701,27 @@ server <- function(input, output, session) {
       })
     }
   })
-  
+
   output$ui_fab_info <- renderUI({
     if(is_de()) {
       tagList(
         div(class = "fab-info-title", "Zur FAB-Skala"),
         div(class = "fab-info-text",
-            "Die FAB-Skala (Facets of Altruistic Behaviors) wurde von Windmann, Binder & Schultze (2021) entwickelt. Sie misst altruistische Verhaltenstendenzen in drei Facetten: Altruistisches Verstärken (Help Giving), Altruistisches Bestrafen (Peer Punishment) und Altruistischer Widerstand (Moral Courage). Items wurden mithilfe des Ant Colony Optimization-Verfahrens ausgewählt und zeigten exzellente Messmodelleigenschaften. ",
-            tags$a("Zum Originalartikel →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
+          "Die FAB-Skala (Facets of Altruistic Behaviors) wurde von Windmann, Binder & Schultze (2021) entwickelt. Sie misst altruistische Verhaltenstendenzen in drei Facetten: Altruistisches Verstärken (Help Giving), Altruistisches Bestrafen (Peer Punishment) und Altruistischer Widerstand (Moral Courage). Items wurden mithilfe des Ant Colony Optimization-Verfahrens ausgewählt und zeigten exzellente Messmodelleigenschaften. ",
+          tags$a("Zum Originalartikel →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
         )
       )
     } else {
       tagList(
         div(class = "fab-info-title", "About the FAB Scale"),
         div(class = "fab-info-text",
-            "The FAB scale (Facets of Altruistic Behaviors) was developed by Windmann, Binder & Schultze (2021). It measures altruistic behavioral tendencies across three facets: Costly Rewarding (Help Giving), Costly Punishment (Peer Punishment), and Costly Countercontrol (Moral Courage). Items were selected using Ant Colony Optimization procedures and demonstrated excellent measurement model properties. Note: The English item selection is based on an independent US sample and differs slightly from the German version (manuscript in preparation). ",
-            tags$a("Read the original article →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
+          "The FAB scale (Facets of Altruistic Behaviors) was developed by Windmann, Binder & Schultze (2021). It measures altruistic behavioral tendencies across three facets: Costly Rewarding (Help Giving), Costly Punishment (Peer Punishment), and Costly Countercontrol (Moral Courage). Items were selected using Ant Colony Optimization procedures and demonstrated excellent measurement model properties. Note: The English item selection is based on an independent US sample and differs slightly from the German version (manuscript in preparation). ",
+          tags$a("Read the original article →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
         )
       )
     }
   })
-  
+
   output$ui_footer <- renderUI({
     url <- "https://www.psychologie.uni-frankfurt.de/50042693/Willkommen_bei_der_Allgemeinen_Psychologie_II__br_Prof__Dr__Sabine_Windmann"
     if(is_de()) {
@@ -738,7 +738,7 @@ server <- function(input, output, session) {
       )
     }
   })
-  
+
   observeEvent(input$btn_back, {
     rv_panel("fab_items"); rv_scores(NULL); rv_ref(NULL); rv_item_order(NULL)
   })
