@@ -6,8 +6,8 @@ This Shiny app allows users to complete the Facets of Altruistic Behaviors (FAB)
 **Shiny App**: [luciebinder.shinyapps.io/fab-app/](https://luciebinder.shinyapps.io/fab-app/)
 
 ## Subscales:
-🇩🇪 German version: Help Giving (HG), Peer Punishment (PP), Moral Courage (MC)  
-🇬🇧 English version: Costly Rewarding (CR), Costly Punishment (CP), Costly Countercontrol (CC)
+- German version: Help Giving (HG), Peer Punishment (PP), Moral Courage (MC)  
+- English version: Costly Rewarding (CR), Costly Punishment (CP), Costly Countercontrol (CC)
 
 ## Norm data: 
 Based on N = 5,806 participants (3,757 German-speaking, 2,049 English-speaking).
