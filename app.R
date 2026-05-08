@@ -467,7 +467,7 @@ server <- function(input, output, session) {
   outputOptions(output, "current_panel", suspendWhenHidden = FALSE)
 
   output$hdr_title        <- renderText({ if(is_de()) "FAB \u2013 Fragebogen zu altruistischen Verhaltensweisen" else "FAB \u2013 Facets of Altruistic Behaviors Scale" })
-  output$hdr_subtitle     <- renderText({ "" })
+  output$hdr_subtitle     <- renderText({ if(is_de()) "Online-Selbsttest" else "Online Self-Assessment Tool" })
   output$lbl_lang         <- renderText({ if(is_de()) "Sprache" else "Language" })
   output$lbl_demo_hdr     <- renderText({ if(is_de()) "Angaben zu Ihrer Person" else "About You" })
   output$lbl_age          <- renderText({ if(is_de()) "Alter" else "Age" })
@@ -475,8 +475,8 @@ server <- function(input, output, session) {
   output$lbl_edu          <- renderText({ if(is_de()) "H\u00f6chster Bildungsabschluss" else "Highest level of education" })
   output$lbl_next         <- renderText({ if(is_de()) "Weiter \u2192" else "Next \u2192" })
   output$lbl_intro        <- renderText({
-    if(is_de()) "Wie stark ausgeprägt sind Ihre altruistischen Verhaltenstendenzen? Der folgende Fragebogen erfasst Ihre Werte in drei Facetten und vergleicht sie mit einer Normstichprobe. Bitte beantworten Sie alle 15 Aussagen spontan und ehrlich."
-    else "How strong are your altruistic behavioral tendencies? The following questionnaire assesses your scores across three facets and compares them to a normative sample. Please answer all 15 statements spontaneously and honestly."
+    if(is_de()) "Wie stark ausgeprägt sind Ihre altruistischen Verhaltenstendenzen? Der folgende Fragebogen erfasst Ihre Werte in drei Facetten und vergleicht sie mit einer Normstichprobe. Die Ergebnisse sind als Schätzung zu verstehen und ersetzen keine professionelle Diagnostik. Die Teilnahme erfolgt freiwillig und auf eigene Verantwortung. Es werden keinerlei Daten gespeichert oder übertragen. Bitte beantworten Sie alle 15 Aussagen spontan und ehrlich."
+    else "How strong are your altruistic behavioral tendencies? The following questionnaire assesses your scores across three facets and compares them to a normative sample. Results should be regarded as estimates and do not replace professional assessment. Participation is voluntary and at your own responsibility. No data is stored or transmitted. Please answer all 15 statements spontaneously and honestly."
   })
   output$lbl_scale        <- renderText({ if(is_de()) "Bitte geben Sie an, wie sehr die folgenden Aussagen typischerweise auf Sie zutreffen." else "Please state honestly and spontaneously how you would typically behave or act." })
   output$lbl_submit       <- renderText({ if(is_de()) "Auswerten" else "Submit" })
