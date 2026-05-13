@@ -328,6 +328,8 @@ ui <- fluidPage(
       }
       .btn-print:hover { background: #e8f0fb; }
       .results-buttons { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+      .results-header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 2px solid #dce8f7; }
+      .results-header-row .card-title { margin-bottom: 0; padding-bottom: 0; border-bottom: none; flex: 1; }
       .subscale-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
       @media(max-width:700px){ .subscale-grid { grid-template-columns: 1fr; } }
       .subscale-panel { background: white; border-radius: 14px; padding: 16px 12px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
@@ -418,7 +420,11 @@ ui <- fluidPage(
 
     conditionalPanel("output.current_panel == 'fab_results'",
       div(class = "card",
-        div(class = "card-title", textOutput("lbl_results_hdr")),
+        div(class = "results-header-row",
+          div(class = "card-title", textOutput("lbl_results_hdr")),
+          tags$button(textOutput("lbl_print"), class = "btn-print",
+                      onclick = "window.print()")
+        ),
         div(class = "results-disclaimer", textOutput("lbl_results_disclaimer")),
         uiOutput("ui_comp_badge")
       ),
@@ -558,10 +564,7 @@ server <- function(input, output, session) {
     n <- nrow(ref$data)
     lbl_text <- if(is_de()) paste0("Gesamtstichprobe: N\u00a0=\u00a0", n, " Personen")
                 else        paste0("Full sample: N\u00a0=\u00a0", n, " participants")
-    div(style = "display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px;",
-      div(class = "badge-comp", style = "margin-bottom:0;", lbl_text),
-      tags$button(textOutput("lbl_print"), class = "btn-print", onclick = "window.print()")
-    )
+    div(class = "badge-comp", lbl_text)
   })
 
   # ── Percentile classification table ─────────────────────────────────────────
