@@ -339,7 +339,7 @@ ui <- fluidPage(
       .gauge-classification { font-size: 1.3rem; color: #555; font-style: italic; text-align: center; margin-top: 2px; }
       .gauge-mean { font-size: 1.5rem; color: #111; font-weight: 500; }
       .pct-box { background: #f0f5fb; border-radius: 10px; padding: 14px 18px; font-size: 1.5rem; color: #1a1a2e; line-height: 1.6; margin-bottom: 14px; }
-      .badge-comp { display: inline-block; background: #dce8f7; color: #004E9E; border-radius: 20px; padding: 6px 18px; font-size: 1.5rem; font-weight: 600; }
+      .badge-comp { display: inline-block; background: #dce8f7; color: #004E9E; border-radius: 12px; padding: 12px 18px; font-size: 1.2rem; line-height: 1.7; }
       .app-footer { text-align: center; font-size: 1.2rem; color: #888; padding: 16px 0 24px; line-height: 1.8; }
       .footer-link { color: #004E9E; text-decoration: none; }
       .footer-link:hover { text-decoration: underline; }
@@ -386,81 +386,81 @@ ui <- fluidPage(
       }
     "))
   ),
-
+  
   div(class = "app-header",
-    div(class = "app-header-text",
-      tags$h2(textOutput("hdr_title")),
-      tags$p(textOutput("hdr_subtitle"))
-    ),
-    conditionalPanel("output.current_panel == 'fab_items'",
-      div(class = "lang-switcher",
-        tags$button("Deutsch", class = "btn-lang", id = "btn_lang_de",
-          onclick = "Shiny.setInputValue('sel_lang', 'DE', {priority: 'event'})"),
-        tags$button("English", class = "btn-lang", id = "btn_lang_en",
-          onclick = "Shiny.setInputValue('sel_lang', 'EN', {priority: 'event'})")
+      div(class = "app-header-text",
+          tags$h2(textOutput("hdr_title")),
+          tags$p(textOutput("hdr_subtitle"))
+      ),
+      conditionalPanel("output.current_panel == 'fab_items'",
+                       div(class = "lang-switcher",
+                           tags$button("Deutsch", class = "btn-lang", id = "btn_lang_de",
+                                       onclick = "Shiny.setInputValue('sel_lang', 'DE', {priority: 'event'})"),
+                           tags$button("English", class = "btn-lang", id = "btn_lang_en",
+                                       onclick = "Shiny.setInputValue('sel_lang', 'EN', {priority: 'event'})")
+                       )
+      ),
+      conditionalPanel("output.current_panel != 'fab_items'",
+                       actionButton("btn_home", label = textOutput("lbl_home"), class = "btn-home")
       )
-    ),
-    conditionalPanel("output.current_panel != 'fab_items'",
-      actionButton("btn_home", label = textOutput("lbl_home"), class = "btn-home")
-    )
   ),
-
+  
   div(style = "display:none;",
-    selectInput("sel_lang", label = NULL, choices = c("Deutsch" = "DE", "English" = "EN"), selected = "DE")
+      selectInput("sel_lang", label = NULL, choices = c("Deutsch" = "DE", "English" = "EN"), selected = "DE")
   ),
-
+  
   div(class = "main-wrap",
-    conditionalPanel("output.current_panel == 'fab_items'",
-      div(class = "intro-box", textOutput("lbl_intro")),
-      div(class = "scale-banner", textOutput("lbl_scale")),
-      uiOutput("ui_items"),
-      uiOutput("ui_item_err"),
-      actionButton("btn_next", textOutput("lbl_next"), class = "btn-primary-fab", style = "margin-top: 14px;")
-    ),
-
-    conditionalPanel("output.current_panel == 'fab_results'",
-      div(class = "card",
-        div(class = "results-header-row",
-          div(class = "card-title", textOutput("lbl_results_hdr")),
-          tags$button(textOutput("lbl_print"), class = "btn-print",
-                      onclick = "window.print()")
-        ),
-        div(class = "results-disclaimer", textOutput("lbl_results_disclaimer")),
-        uiOutput("ui_comp_badge")
+      conditionalPanel("output.current_panel == 'fab_items'",
+                       div(class = "intro-box", textOutput("lbl_intro")),
+                       div(class = "scale-banner", textOutput("lbl_scale")),
+                       uiOutput("ui_items"),
+                       uiOutput("ui_item_err"),
+                       actionButton("btn_next", textOutput("lbl_next"), class = "btn-primary-fab", style = "margin-top: 14px;")
       ),
-      # Subscale results (one card per subscale)
-      uiOutput("ui_subscale_panels"),
-      # Percentile explanation + table BELOW results
-      div(class = "card",
-        div(class = "fab-info-title", textOutput("lbl_pct_section_hdr")),
-        div(class = "pct-box", style = "margin-bottom: 0;", textOutput("lbl_pct_info")),
-        uiOutput("ui_pct_table")
-      ),
-      # FAB info at bottom
-      div(class = "card fab-info-card",
-        uiOutput("ui_fab_info")
-      ),
-      div(class = "results-buttons",
-        actionButton("btn_back", textOutput("lbl_back"), class = "btn-secondary-fab")
+      
+      conditionalPanel("output.current_panel == 'fab_results'",
+                       div(class = "card",
+                           div(class = "results-header-row",
+                               div(class = "card-title", textOutput("lbl_results_hdr")),
+                               tags$button(textOutput("lbl_print"), class = "btn-print",
+                                           onclick = "window.print()")
+                           ),
+                           div(class = "results-disclaimer", textOutput("lbl_results_disclaimer")),
+                           uiOutput("ui_comp_badge")
+                       ),
+                       # Subscale results (one card per subscale)
+                       uiOutput("ui_subscale_panels"),
+                       # Percentile explanation + table BELOW results
+                       div(class = "card",
+                           div(class = "fab-info-title", textOutput("lbl_pct_section_hdr")),
+                           div(class = "pct-box", style = "margin-bottom: 0;", textOutput("lbl_pct_info")),
+                           uiOutput("ui_pct_table")
+                       ),
+                       # FAB info at bottom
+                       div(class = "card fab-info-card",
+                           uiOutput("ui_fab_info")
+                       ),
+                       div(class = "results-buttons",
+                           actionButton("btn_back", textOutput("lbl_back"), class = "btn-secondary-fab")
+                       )
       )
-    )
   ),
   tags$footer(class = "app-footer", uiOutput("ui_footer"))
 )
 
 # ── Server ─────────────────────────────────────────────────────────────────────
 server <- function(input, output, session) {
-
+  
   rv_panel      <- reactiveVal("fab_items")
   rv_scores     <- reactiveVal(NULL)
   rv_ref        <- reactiveVal(NULL)
   rv_item_order <- reactiveVal(NULL)
-
+  
   is_de <- reactive({ input$sel_lang == "DE" })
-
+  
   output$current_panel <- reactive({ rv_panel() })
   outputOptions(output, "current_panel", suspendWhenHidden = FALSE)
-
+  
   output$hdr_title        <- renderText({ if(is_de()) "FAB \u2013 Fragebogen zu altruistischen Verhaltensweisen" else "FAB \u2013 Facets of Altruistic Behaviors Scale" })
   output$hdr_subtitle     <- renderText({ if(is_de()) "Online-Selbsttest" else "Online Self-Assessment Tool" })
   output$lbl_lang         <- renderText({ if(is_de()) "Sprache" else "Language" })
@@ -481,6 +481,7 @@ server <- function(input, output, session) {
     else "The percentile rank describes how your scores compare to the reference group \u2013 it is purely descriptive and not evaluative. A percentile rank of 75 means your scores are higher than those of 75\u00a0% of the comparison group."
   })
   output$lbl_back         <- renderText({ if(is_de()) "\u2190 Zur\u00fcck" else "\u2190 Back" })
+  
   output$lbl_footer        <- renderText({ "" })  # replaced by ui_footer
   output$lbl_home         <- renderText({ if(is_de()) "Start" else "Start" })
   output$lbl_print        <- renderText({ if(is_de()) "Ergebnisse drucken" else "Print results" })
@@ -488,14 +489,14 @@ server <- function(input, output, session) {
     if(is_de()) "Ihre Angaben sind freiwillig. Ohne Angaben werden Ihre Ergebnisse mit der gesamten deutschsprachigen Stichprobe verglichen (N\u00a0=\u00a03.757). Mit Angaben werden Ihre Ergebnisse verglichen mit Personen gleichen Geschlechts, \u00e4hnlichen Alters (\u00b110 Jahre) und gleicher Bildung. Sind in dieser Gruppe weniger als 20 Personen vorhanden, wird die Vergleichsgruppe schrittweise erweitert. Es werden keinerlei Daten gespeichert oder \u00fcbertragen."
     else "Your input is optional. Without input, your results will be compared to the full English-speaking sample (N\u00a0=\u00a02,049). With input, your results will be compared to people of the same gender, similar age (\u00b110 years), and same education level. If fewer than 20 people match these criteria, the comparison group is broadened stepwise. No data is stored or transmitted."
   })
-
+  
   observeEvent(input$sel_lang, {
     rv_item_order(NULL)
     session$sendCustomMessage("activeLang", input$sel_lang)
   })
-
+  
   output$ui_demo_err <- renderUI(NULL)
-
+  
   observeEvent(input$btn_next, {
     items_def  <- if(is_de()) items_de else items_en
     sub_means  <- list()
@@ -510,7 +511,7 @@ server <- function(input, output, session) {
     }
     if (any_missing) {
       output$ui_item_err <- renderUI(div(class = "err-box",
-        if(is_de()) "Bitte beantworten Sie alle Fragen." else "Please answer all questions."))
+                                         if(is_de()) "Bitte beantworten Sie alle Fragen." else "Please answer all questions."))
       return()
     }
     output$ui_item_err <- renderUI(NULL)
@@ -528,7 +529,7 @@ server <- function(input, output, session) {
     rv_scores(list(means = sub_means, percentiles = pcts, ref_scores = ref_scores_list))
     rv_panel("fab_results")
   })
-
+  
   output$ui_items <- renderUI({
     items_def <- if(is_de()) items_de else items_en
     legend    <- if(is_de()) scale_legend_de else scale_legend_en
@@ -539,34 +540,44 @@ server <- function(input, output, session) {
     if (is.null(rv_item_order())) rv_item_order(sample(names(all_items)))
     item_order <- rv_item_order()
     header_row <- div(class = "matrix-header",
-      div(class = "matrix-item-col"),
-      lapply(legend, function(l) div(class = "matrix-anchor", l))
+                      div(class = "matrix-item-col"),
+                      lapply(legend, function(l) div(class = "matrix-anchor", l))
     )
     item_rows <- lapply(item_order, function(ik) {
       radio_cells <- lapply(1:6, function(val) {
         div(class = "matrix-cell",
-          tags$input(type = "radio", name = paste0("r_", ik), value = val,
-            id = paste0("r_", ik, "_", val),
-            onclick = paste0("Shiny.setInputValue('r_", ik, "', ", val, ", {priority: 'event'})"))
+            tags$input(type = "radio", name = paste0("r_", ik), value = val,
+                       id = paste0("r_", ik, "_", val),
+                       onclick = paste0("Shiny.setInputValue('r_", ik, "', ", val, ", {priority: 'event'})"))
         )
       })
       div(class = "matrix-row", div(class = "matrix-item-col", all_items[[ik]]), tagList(radio_cells))
     })
     div(class = "card matrix-card", header_row, tagList(item_rows))
   })
-
+  
   output$ui_item_err <- renderUI(NULL)
-
-
-
+  
+  
+  
   output$ui_comp_badge <- renderUI({
     ref <- rv_ref(); if(is.null(ref)) return(NULL)
     n <- nrow(ref$data)
-    lbl_text <- if(is_de()) paste0("Gesamtstichprobe: N\u00a0=\u00a0", n, " Personen")
-                else        paste0("Full sample: N\u00a0=\u00a0", n, " participants")
+    lbl_text <- if(is_de())
+      tagList(
+        tags$b(paste0("Vergleichsstichprobe: N\u00a0=\u00a0", n, " Personen")), tags$br(),
+        "Geschlecht: 57,7\u00a0% weiblich, 41,6\u00a0% m\u00e4nnlich, 0,4\u00a0% non-bin\u00e4r", tags$br(),
+        "Alter: 18\u201383 Jahre, \u00d8\u00a040,3 Jahre"
+      )
+    else
+      tagList(
+        tags$b(paste0("Comparison sample: N\u00a0=\u00a0", n, " participants")), tags$br(),
+        "Gender: 52.1\u00a0% male, 47.5\u00a0% female, 0.4\u00a0% non-binary", tags$br(),
+        "Age: 18\u201394 years, average: 42.2 years"
+      )
     div(class = "badge-comp", lbl_text)
   })
-
+  
   # ── Percentile classification table ─────────────────────────────────────────
   output$ui_pct_table <- renderUI({
     if(is_de()) {
@@ -577,7 +588,7 @@ server <- function(input, output, session) {
         c("76–84", "überdurchschnittlich"),
         c("> 84",  "weit überdurchschnittlich")
       )
-      hdr <- c("Prozentrang", "Einordnung")
+      hdr <- c("Prozentrang", "Statistische Einordnung")
     } else {
       rows <- list(
         c("< 16",  "far below average"),
@@ -586,32 +597,32 @@ server <- function(input, output, session) {
         c("76–84", "above average"),
         c("> 84",  "far above average")
       )
-      hdr <- c("Percentile rank", "Classification")
+      hdr <- c("Percentile rank", "Statistical Classification")
     }
     tags$table(class = "pct-table",
-      tags$thead(
-        tags$tr(lapply(hdr, function(h) tags$th(h)))
-      ),
-      tags$tbody(
-        lapply(rows, function(r) tags$tr(lapply(r, function(cell) tags$td(cell))))
-      )
+               tags$thead(
+                 tags$tr(lapply(hdr, function(h) tags$th(h)))
+               ),
+               tags$tbody(
+                 lapply(rows, function(r) tags$tr(lapply(r, function(cell) tags$td(cell))))
+               )
     )
   })
-
+  
   output$ui_subscale_panels <- renderUI({
     sc <- rv_scores(); if(is.null(sc)) return(NULL)
     items_def <- if(is_de()) items_de else items_en
     desc_vec  <- if(is_de()) facet_desc_de else facet_desc_en
     ref       <- rv_ref()
     n_ref     <- if(!is.null(ref)) nrow(ref$data) else "?"
-
+    
     lapply(names(sc$means), function(sk) {
       sub       <- items_def[[sk]]
       mean_val  <- round(sc$means[[sk]], 2)
       pct       <- sc$percentiles[[sk]]
       pct_class <- if(!is.null(pct)) classify_percentile(pct, if(is_de()) "DE" else "EN") else ""
       facet_txt <- if(sk %in% names(desc_vec)) desc_vec[[sk]] else ""
-
+      
       # Summary sentence
       summary_sent <- if(!is.null(pct)) {
         if(is_de())
@@ -625,27 +636,27 @@ server <- function(input, output, session) {
       } else {
         if(is_de()) "Zu wenige Vergleichsdaten verfügbar." else "Insufficient comparison data available."
       }
-
+      
       div(class = "card subscale-result-card",
-        # Subscale title
-        div(class = "card-title", sub$subscale_label),
-        # Short definition
-        div(class = "facet-desc", facet_txt),
-        # Gauges side by side
-        div(class = "plots-row",
-          div(class = "plot-col",
-            plotOutput(paste0("g_", sk), height = "210px")
+          # Subscale title
+          div(class = "card-title", sub$subscale_label),
+          # Short definition
+          div(class = "facet-desc", facet_txt),
+          # Gauges side by side
+          div(class = "plots-row",
+              div(class = "plot-col",
+                  plotOutput(paste0("g_", sk), height = "210px")
+              ),
+              div(class = "plot-col",
+                  plotOutput(paste0("n_", sk), height = "210px")
+              )
           ),
-          div(class = "plot-col",
-            plotOutput(paste0("n_", sk), height = "210px")
-          )
-        ),
-        # Summary sentence
-        div(class = "summary-sent", summary_sent)
+          # Summary sentence
+          div(class = "summary-sent", summary_sent)
       )
     })
   })
-
+  
   observe({
     sc <- rv_scores(); if(is.null(sc)) return()
     items_def    <- if(is_de()) items_de else items_en
@@ -660,7 +671,7 @@ server <- function(input, output, session) {
       })
     }
   })
-
+  
   observe({
     sc <- rv_scores(); if(is.null(sc)) return()
     items_def    <- if(is_de()) items_de else items_en
@@ -677,27 +688,27 @@ server <- function(input, output, session) {
       })
     }
   })
-
+  
   output$ui_fab_info <- renderUI({
     if(is_de()) {
       tagList(
         div(class = "fab-info-title", "Zur FAB-Skala"),
         div(class = "fab-info-text",
-          "Die FAB-Skala (Facets of Altruistic Behaviors) wurde von Windmann, Binder & Schultze (2021) entwickelt. Sie misst altruistische Verhaltenstendenzen in drei Facetten: Altruistisches Verstärken (Help Giving), Altruistisches Bestrafen (Peer Punishment) und Altruistischer Widerstand (Moral Courage). Items wurden mithilfe des Ant Colony Optimization-Verfahrens ausgewählt und zeigten exzellente Messmodelleigenschaften. ",
-          tags$a("Zum Originalartikel →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
+            "Die FAB-Skala (Facets of Altruistic Behaviors) wurde von Windmann, Binder & Schultze (2021) entwickelt. Sie misst altruistische Verhaltenstendenzen in drei Facetten: Altruistisches Verstärken (Help Giving), Altruistisches Bestrafen (Peer Punishment) und Altruistischer Widerstand (Moral Courage). Items wurden mithilfe des Ant Colony Optimization-Verfahrens ausgewählt und zeigten exzellente Messmodelleigenschaften. ",
+            tags$a("Zum Originalartikel →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
         )
       )
     } else {
       tagList(
         div(class = "fab-info-title", "About the FAB Scale"),
         div(class = "fab-info-text",
-          "The FAB scale (Facets of Altruistic Behaviors) was developed by Windmann, Binder & Schultze (2021). It measures altruistic behavioral tendencies across three facets: Costly Rewarding (Help Giving), Costly Punishment (Peer Punishment), and Costly Countercontrol (Moral Courage). Items were selected using Ant Colony Optimization procedures and demonstrated excellent measurement model properties. Note: The English item selection is based on an independent US sample and differs slightly from the German version (manuscript in preparation). ",
-          tags$a("Read the original article →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
+            "The FAB scale (Facets of Altruistic Behaviors) was developed by Windmann, Binder & Schultze (2021). It measures altruistic behavioral tendencies across three facets: Costly Rewarding (Help Giving), Costly Punishment (Peer Punishment), and Costly Countercontrol (Moral Courage). Items were selected using Ant Colony Optimization procedures and demonstrated excellent measurement model properties. Note: The English item selection is based on an independent US sample and differs slightly from the German version (manuscript in preparation). ",
+            tags$a("Read the original article →", href = "https://doi.org/10.1027/1864-9335/a000460", target = "_blank", class = "fab-link")
         )
       )
     }
   })
-
+  
   output$ui_footer <- renderUI({
     url <- "https://www.psychologie.uni-frankfurt.de/50042693/Willkommen_bei_der_Allgemeinen_Psychologie_II__br_Prof__Dr__Sabine_Windmann"
     if(is_de()) {
@@ -714,7 +725,7 @@ server <- function(input, output, session) {
       )
     }
   })
-
+  
   observeEvent(input$btn_back, {
     rv_panel("fab_items"); rv_scores(NULL); rv_ref(NULL); rv_item_order(NULL)
   })
