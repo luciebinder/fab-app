@@ -13,7 +13,7 @@ This Shiny app allows users to complete the Facets of Altruistic Behaviors (FAB)
 Based on N = 5,806 participants (3,757 German-speaking, 2,049 English-speaking).
 
 ## Percentile Rank
-percentile = mean(ref_scores <= user_score) * 100
+percentile = mean(ref_scores <= user_score) * 100  
 A percentile rank of e.g. 75 means the user scores higher than 75% of the comparison group.
 
 
