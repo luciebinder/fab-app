@@ -415,19 +415,7 @@ ui <- fluidPage(
       uiOutput("ui_item_err"),
       actionButton("btn_next", textOutput("lbl_next"), class = "btn-primary-fab", style = "margin-top: 14px;")
     ),
-    conditionalPanel("output.current_panel == 'fab_demo'",
-      div(class = "card",
-        div(class = "card-title", textOutput("lbl_demo_hdr")),
-        div(class = "optional-hint", textOutput("lbl_optional_hint")),
-        div(class = "demo-grid",
-          numericInput("inp_age",   textOutput("lbl_age"),    value = NA, min = 18, max = 100),
-          selectInput("inp_gender", textOutput("lbl_gender"), choices = c("–" = ""))
-        ),
-        selectInput("inp_edu", textOutput("lbl_edu"), choices = c("–" = "")),
-        uiOutput("ui_demo_err"),
-        actionButton("btn_submit", textOutput("lbl_submit"), class = "btn-primary-fab")
-      )
-    ),
+
     conditionalPanel("output.current_panel == 'fab_results'",
       div(class = "card",
         div(class = "card-title", textOutput("lbl_results_hdr")),
@@ -470,17 +458,12 @@ server <- function(input, output, session) {
   output$hdr_title        <- renderText({ if(is_de()) "FAB \u2013 Fragebogen zu altruistischen Verhaltensweisen" else "FAB \u2013 Facets of Altruistic Behaviors Scale" })
   output$hdr_subtitle     <- renderText({ if(is_de()) "Online-Selbsttest" else "Online Self-Assessment Tool" })
   output$lbl_lang         <- renderText({ if(is_de()) "Sprache" else "Language" })
-  output$lbl_demo_hdr     <- renderText({ if(is_de()) "Angaben zu Ihrer Person" else "About You" })
-  output$lbl_age          <- renderText({ if(is_de()) "Alter" else "Age" })
-  output$lbl_gender       <- renderText({ if(is_de()) "Geschlecht" else "Gender" })
-  output$lbl_edu          <- renderText({ if(is_de()) "H\u00f6chster Bildungsabschluss" else "Highest level of education" })
   output$lbl_next         <- renderText({ if(is_de()) "Weiter \u2192" else "Next \u2192" })
   output$lbl_intro        <- renderText({
     if(is_de()) "Wie stark ausgeprägt sind Ihre altruistischen Verhaltenstendenzen? Der folgende Fragebogen erfasst Ihre Werte in drei Facetten und vergleicht sie mit einer Normstichprobe. Die Teilnahme erfolgt freiwillig und auf eigene Verantwortung. Es werden keinerlei Daten gespeichert oder übertragen. Bitte beantworten Sie alle 15 Aussagen spontan und ehrlich."
     else "How strong are your altruistic behavioral tendencies? The following questionnaire assesses your scores across three facets and compares them to a normative sample. Participation is voluntary and at your own responsibility. No data is stored or transmitted. Please answer all 15 statements spontaneously and honestly."
   })
   output$lbl_scale        <- renderText({ if(is_de()) "Bitte geben Sie an, wie sehr die folgenden Aussagen typischerweise auf Sie zutreffen." else "Please state honestly and spontaneously how you would typically behave or act." })
-  output$lbl_submit       <- renderText({ if(is_de()) "Auswerten" else "Submit" })
   output$lbl_results_hdr       <- renderText({ if(is_de()) "Ihre Ergebnisse" else "Your Results" })
   output$lbl_results_disclaimer <- renderText({
     if(is_de()) "Die folgenden Ergebnisse basieren auf Ihrer Selbstauskunft und sind als Schätzung zu verstehen."
@@ -501,15 +484,44 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$sel_lang, {
-    updateSelectInput(session, "inp_gender", choices = c("\u2013" = "", if(is_de()) gender_de else gender_en))
-    updateSelectInput(session, "inp_edu",    choices = c("\u2013" = "", if(is_de()) edu_de else edu_en))
     rv_item_order(NULL)
     session$sendCustomMessage("activeLang", input$sel_lang)
   })
 
   output$ui_demo_err <- renderUI(NULL)
 
-  observeEvent(input$btn_next, { rv_panel("fab_demo") })
+  observeEvent(input$btn_next, {
+    items_def  <- if(is_de()) items_de else items_en
+    sub_means  <- list()
+    any_missing <- FALSE
+    for (sk in names(items_def)) {
+      vals <- sapply(names(items_def[[sk]]$items), function(ik) {
+        v <- input[[paste0("r_", ik)]]
+        if (is.null(v) || v == "") NA_real_ else as.numeric(v)
+      })
+      if (any(is.na(vals))) { any_missing <- TRUE; break }
+      sub_means[[sk]] <- mean(vals)
+    }
+    if (any_missing) {
+      output$ui_item_err <- renderUI(div(class = "err-box",
+        if(is_de()) "Bitte beantworten Sie alle Fragen." else "Please answer all questions."))
+      return()
+    }
+    output$ui_item_err <- renderUI(NULL)
+    # Always use full language sample
+    ref <- get_reference(input$sel_lang, "", NA, "")
+    rv_ref(ref)
+    subscale_cols <- if(is_de()) c(hg="hg", pp="pp", mc="mc") else c(cr="cr", cp="cp", cc="cc")
+    pcts <- lapply(names(sub_means), function(sk) compute_percentile(sub_means[[sk]], ref$data[[subscale_cols[[sk]]]]))
+    names(pcts) <- names(sub_means)
+    ref_scores_list <- lapply(names(sub_means), function(sk) {
+      col <- subscale_cols[[sk]]
+      ref$data[[col]][!is.na(ref$data[[col]])]
+    })
+    names(ref_scores_list) <- names(sub_means)
+    rv_scores(list(means = sub_means, percentiles = pcts, ref_scores = ref_scores_list))
+    rv_panel("fab_results")
+  })
 
   output$ui_items <- renderUI({
     items_def <- if(is_de()) items_de else items_en
@@ -539,57 +551,13 @@ server <- function(input, output, session) {
 
   output$ui_item_err <- renderUI(NULL)
 
-  observeEvent(input$btn_submit, {
-    age_val <- input$inp_age
-    age_ok  <- is.na(age_val) || (age_val >= 18 && age_val <= 100)
-    if (!age_ok) {
-      output$ui_demo_err <- renderUI(div(class = "err-box",
-        if(is_de()) "Bitte geben Sie ein g\u00fcltiges Alter ein (18\u2013100) oder lassen Sie das Feld leer."
-        else "Please enter a valid age (18\u2013100) or leave the field empty."))
-      return()
-    }
-    output$ui_demo_err <- renderUI(NULL)
-    items_def  <- if(is_de()) items_de else items_en
-    sub_means  <- list()
-    any_missing <- FALSE
-    for (sk in names(items_def)) {
-      vals <- sapply(names(items_def[[sk]]$items), function(ik) {
-        v <- input[[paste0("r_", ik)]]
-        if (is.null(v) || v == "") NA_real_ else as.numeric(v)
-      })
-      if (any(is.na(vals))) { any_missing <- TRUE; break }
-      sub_means[[sk]] <- mean(vals)
-    }
-    if (any_missing) {
-      output$ui_item_err <- renderUI(div(class = "err-box",
-        if(is_de()) "Bitte beantworten Sie alle Fragen." else "Please answer all questions."))
-      return()
-    }
-    output$ui_item_err <- renderUI(NULL)
-    ref <- get_reference(input$sel_lang, input$inp_gender,
-                         if(is.na(input$inp_age)) NA else as.numeric(input$inp_age),
-                         input$inp_edu)
-    rv_ref(ref)
-    subscale_cols <- if(is_de()) c(hg="hg", pp="pp", mc="mc") else c(cr="cr", cp="cp", cc="cc")
-    pcts <- lapply(names(sub_means), function(sk) compute_percentile(sub_means[[sk]], ref$data[[subscale_cols[[sk]]]]))
-    names(pcts) <- names(sub_means)
-    ref_scores_list <- lapply(names(sub_means), function(sk) {
-      col <- subscale_cols[[sk]]
-      ref$data[[col]][!is.na(ref$data[[col]])]
-    })
-    names(ref_scores_list) <- names(sub_means)
-    rv_scores(list(means = sub_means, percentiles = pcts, ref_scores = ref_scores_list))
-    rv_panel("fab_results")
-  })
+
 
   output$ui_comp_badge <- renderUI({
     ref <- rv_ref(); if(is.null(ref)) return(NULL)
     n <- nrow(ref$data)
-    lbl_text <- switch(ref$level,
-      "specific" = if(is_de()) paste0("Vergleichsgruppe (passend): n\u00a0=\u00a0", n, " Personen") else paste0("Matched comparison group: n\u00a0=\u00a0", n, " participants"),
-      "broad"    = if(is_de()) paste0("Vergleichsgruppe (breit): n\u00a0=\u00a0", n, " Personen")    else paste0("Broad comparison group: n\u00a0=\u00a0", n, " participants"),
-      if(is_de()) paste0("Gesamtstichprobe: N\u00a0=\u00a0", n, " Personen") else paste0("Full sample: N\u00a0=\u00a0", n, " participants")
-    )
+    lbl_text <- if(is_de()) paste0("Gesamtstichprobe: N\u00a0=\u00a0", n, " Personen")
+                else        paste0("Full sample: N\u00a0=\u00a0", n, " participants")
     div(style = "display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px;",
       div(class = "badge-comp", style = "margin-bottom:0;", lbl_text),
       tags$button(textOutput("lbl_print"), class = "btn-print", onclick = "window.print()")
